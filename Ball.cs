@@ -6,23 +6,45 @@ public partial class Ball : CharacterBody2D
 	public float LaunchSpeed { get; set; } = 300.0f;
 	
 	private bool _active = false;
+
+	[Signal]
+	public delegate void BallDiedEventHandler();
 	
 	public override void _PhysicsProcess(double delta)
 	{
-		var collision = MoveAndCollide(Velocity * (float)delta);
+		KinematicCollision2D collision = MoveAndCollide(Velocity * (float)delta);
 		
 		if (collision != null)
 		{
-			if (collision.GetCollider() is Node collisionNode && collisionNode.IsInGroup("Walls"))
+			Vector2 bounceDirection = Vector2.Zero;
+
+			if (collision.GetCollider() is StaticBody2D staticBody)
 			{
-				Velocity = Velocity.Bounce(collision.GetNormal());
+				if (staticBody.IsInGroup("Walls"))
+				{
+					if (staticBody.Name == "BottomWall")
+					{
+						EmitSignal(SignalName.BallDied);
+						// TODO: QueueFree();
+					}
+
+					bounceDirection = collision.GetNormal();
+                }
+
+				else if (staticBody is Brick brick)
+				{
+					brick.Hit();
+					bounceDirection = (Position - brick.Position).Normalized();
+				}
 			}
-			else
+
+			else if (collision.GetCollider() is CharacterBody2D charBody)
 			{
-				Vector2 direction = (Position - ((Node2D)collision.GetCollider()).Position).Normalized();
-				Velocity = Velocity.Bounce(direction);
+				bounceDirection = (Position - charBody.Position).Normalized();
 			}
-		}
+
+            Velocity = Velocity.Bounce(bounceDirection);
+        }
 	}
 	
 	public void Shoot()

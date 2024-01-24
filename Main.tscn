@@ -1,13 +1,14 @@
-[gd_scene load_steps=10 format=3 uid="uid://r06psij0kkvb"]
+[gd_scene load_steps=11 format=3 uid="uid://r06psij0kkvb"]
 
 [ext_resource type="Script" path="res://Main.cs" id="1_d7wv0"]
 [ext_resource type="Texture2D" uid="uid://b44pdjekna1bx" path="res://a_pixel.png" id="1_scgc4"]
 [ext_resource type="PackedScene" uid="uid://dtfxswhrleynk" path="res://Ball.tscn" id="2_03vcv"]
 [ext_resource type="PackedScene" uid="uid://dgb7ohxj4t123" path="res://Paddle.tscn" id="2_20s4g"]
 [ext_resource type="Script" path="res://Ball.cs" id="3_yhxu1"]
+[ext_resource type="PackedScene" uid="uid://cr455gv3tbqvc" path="res://Brick.tscn" id="6_ya5aj"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_qiwc1"]
-size = Vector2(480, 20)
+size = Vector2(520, 20)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_xen5a"]
 size = Vector2(20, 720)
@@ -16,7 +17,7 @@ size = Vector2(20, 720)
 size = Vector2(20, 720)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_4oh02"]
-size = Vector2(480, 20)
+size = Vector2(520, 20)
 
 [node name="Main" type="Node"]
 script = ExtResource("1_d7wv0")
@@ -29,11 +30,11 @@ script = ExtResource("3_yhxu1")
 position = Vector2(250, 630)
 
 [node name="TopWall" type="StaticBody2D" parent="." groups=["Walls"]]
-position = Vector2(250, 10)
+position = Vector2(260, 10)
 metadata/_edit_group_ = true
 
 [node name="Sprite2D" type="Sprite2D" parent="TopWall"]
-scale = Vector2(500, 20.833)
+scale = Vector2(520, 20)
 texture = ExtResource("1_scgc4")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="TopWall"]
@@ -51,7 +52,7 @@ texture = ExtResource("1_scgc4")
 shape = SubResource("RectangleShape2D_xen5a")
 
 [node name="RightWall" type="StaticBody2D" parent="." groups=["Walls"]]
-position = Vector2(490, 370)
+position = Vector2(510, 370)
 metadata/_edit_group_ = true
 
 [node name="Sprite2D" type="Sprite2D" parent="RightWall"]
@@ -62,12 +63,232 @@ texture = ExtResource("1_scgc4")
 shape = SubResource("RectangleShape2D_tubqn")
 
 [node name="BottomWall" type="StaticBody2D" parent="." groups=["Walls"]]
-position = Vector2(250, 730)
+position = Vector2(260, 730)
 metadata/_edit_group_ = true
 
 [node name="Sprite2D" type="Sprite2D" parent="BottomWall"]
-scale = Vector2(500, 20.833)
+scale = Vector2(520, 20)
 texture = ExtResource("1_scgc4")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="BottomWall"]
 shape = SubResource("RectangleShape2D_4oh02")
+
+[node name="50Bricks" type="Node2D" parent="."]
+position = Vector2(260, 30)
+metadata/_edit_group_ = true
+
+[node name="Brick" parent="50Bricks" groups=["50Bricks"] instance=ExtResource("6_ya5aj")]
+position = Vector2(-210, 0)
+PointValue = 50
+BrickColor = Color(1, 0, 0, 1)
+
+[node name="Brick2" parent="50Bricks" groups=["50Bricks"] instance=ExtResource("6_ya5aj")]
+position = Vector2(-150, 0)
+PointValue = 50
+BrickColor = Color(1, 0, 0, 1)
+
+[node name="Brick3" parent="50Bricks" groups=["50Bricks"] instance=ExtResource("6_ya5aj")]
+position = Vector2(-90, 0)
+PointValue = 50
+BrickColor = Color(1, 0, 0, 1)
+
+[node name="Brick4" parent="50Bricks" groups=["50Bricks"] instance=ExtResource("6_ya5aj")]
+position = Vector2(-30, 0)
+PointValue = 50
+BrickColor = Color(1, 0, 0, 1)
+
+[node name="Brick5" parent="50Bricks" groups=["50Bricks"] instance=ExtResource("6_ya5aj")]
+position = Vector2(30, 0)
+PointValue = 50
+BrickColor = Color(1, 0, 0, 1)
+
+[node name="Brick6" parent="50Bricks" groups=["50Bricks"] instance=ExtResource("6_ya5aj")]
+position = Vector2(90, 0)
+PointValue = 50
+BrickColor = Color(1, 0, 0, 1)
+
+[node name="Brick7" parent="50Bricks" groups=["50Bricks"] instance=ExtResource("6_ya5aj")]
+position = Vector2(150, 0)
+PointValue = 50
+BrickColor = Color(1, 0, 0, 1)
+
+[node name="Brick8" parent="50Bricks" groups=["50Bricks"] instance=ExtResource("6_ya5aj")]
+position = Vector2(210, 0)
+PointValue = 50
+BrickColor = Color(1, 0, 0, 1)
+
+[node name="40Bricks" type="Node2D" parent="."]
+position = Vector2(260, 50)
+metadata/_edit_group_ = true
+
+[node name="Brick" parent="40Bricks" groups=["50Bricks"] instance=ExtResource("6_ya5aj")]
+position = Vector2(-210, 0)
+PointValue = 40
+BrickColor = Color(1, 1, 0, 1)
+
+[node name="Brick2" parent="40Bricks" groups=["50Bricks"] instance=ExtResource("6_ya5aj")]
+position = Vector2(-150, 0)
+PointValue = 40
+BrickColor = Color(1, 1, 0, 1)
+
+[node name="Brick3" parent="40Bricks" groups=["50Bricks"] instance=ExtResource("6_ya5aj")]
+position = Vector2(-90, 0)
+PointValue = 40
+BrickColor = Color(1, 1, 0, 1)
+
+[node name="Brick4" parent="40Bricks" groups=["50Bricks"] instance=ExtResource("6_ya5aj")]
+position = Vector2(-30, 0)
+PointValue = 40
+BrickColor = Color(1, 1, 0, 1)
+
+[node name="Brick5" parent="40Bricks" groups=["50Bricks"] instance=ExtResource("6_ya5aj")]
+position = Vector2(30, 0)
+PointValue = 40
+BrickColor = Color(1, 1, 0, 1)
+
+[node name="Brick6" parent="40Bricks" groups=["50Bricks"] instance=ExtResource("6_ya5aj")]
+position = Vector2(90, 0)
+PointValue = 40
+BrickColor = Color(1, 1, 0, 1)
+
+[node name="Brick7" parent="40Bricks" groups=["50Bricks"] instance=ExtResource("6_ya5aj")]
+position = Vector2(150, 0)
+PointValue = 40
+BrickColor = Color(1, 1, 0, 1)
+
+[node name="Brick8" parent="40Bricks" groups=["50Bricks"] instance=ExtResource("6_ya5aj")]
+position = Vector2(210, 0)
+PointValue = 40
+BrickColor = Color(1, 1, 0, 1)
+
+[node name="30Bricks" type="Node2D" parent="."]
+position = Vector2(260, 70)
+metadata/_edit_group_ = true
+
+[node name="Brick" parent="30Bricks" groups=["50Bricks"] instance=ExtResource("6_ya5aj")]
+position = Vector2(-210, 0)
+PointValue = 30
+BrickColor = Color(0, 1, 0, 1)
+
+[node name="Brick2" parent="30Bricks" groups=["50Bricks"] instance=ExtResource("6_ya5aj")]
+position = Vector2(-150, 0)
+PointValue = 30
+BrickColor = Color(0, 1, 0, 1)
+
+[node name="Brick3" parent="30Bricks" groups=["50Bricks"] instance=ExtResource("6_ya5aj")]
+position = Vector2(-90, 0)
+PointValue = 30
+BrickColor = Color(0, 1, 0, 1)
+
+[node name="Brick4" parent="30Bricks" groups=["50Bricks"] instance=ExtResource("6_ya5aj")]
+position = Vector2(-30, 0)
+PointValue = 30
+BrickColor = Color(0, 1, 0, 1)
+
+[node name="Brick5" parent="30Bricks" groups=["50Bricks"] instance=ExtResource("6_ya5aj")]
+position = Vector2(30, 0)
+PointValue = 30
+BrickColor = Color(0, 1, 0, 1)
+
+[node name="Brick6" parent="30Bricks" groups=["50Bricks"] instance=ExtResource("6_ya5aj")]
+position = Vector2(90, 0)
+PointValue = 30
+BrickColor = Color(0, 1, 0, 1)
+
+[node name="Brick7" parent="30Bricks" groups=["50Bricks"] instance=ExtResource("6_ya5aj")]
+position = Vector2(150, 0)
+PointValue = 30
+BrickColor = Color(0, 1, 0, 1)
+
+[node name="Brick8" parent="30Bricks" groups=["50Bricks"] instance=ExtResource("6_ya5aj")]
+position = Vector2(210, 0)
+PointValue = 30
+BrickColor = Color(0, 1, 0, 1)
+
+[node name="20Bricks" type="Node2D" parent="."]
+position = Vector2(260, 90)
+metadata/_edit_group_ = true
+
+[node name="Brick" parent="20Bricks" groups=["50Bricks"] instance=ExtResource("6_ya5aj")]
+position = Vector2(-210, 0)
+PointValue = 20
+BrickColor = Color(0, 0, 1, 1)
+
+[node name="Brick2" parent="20Bricks" groups=["50Bricks"] instance=ExtResource("6_ya5aj")]
+position = Vector2(-150, 0)
+PointValue = 20
+BrickColor = Color(0, 0, 1, 1)
+
+[node name="Brick3" parent="20Bricks" groups=["50Bricks"] instance=ExtResource("6_ya5aj")]
+position = Vector2(-90, 0)
+PointValue = 20
+BrickColor = Color(0, 0, 1, 1)
+
+[node name="Brick4" parent="20Bricks" groups=["50Bricks"] instance=ExtResource("6_ya5aj")]
+position = Vector2(-30, 0)
+PointValue = 20
+BrickColor = Color(0, 0, 1, 1)
+
+[node name="Brick5" parent="20Bricks" groups=["50Bricks"] instance=ExtResource("6_ya5aj")]
+position = Vector2(30, 0)
+PointValue = 20
+BrickColor = Color(0, 0, 1, 1)
+
+[node name="Brick6" parent="20Bricks" groups=["50Bricks"] instance=ExtResource("6_ya5aj")]
+position = Vector2(90, 0)
+PointValue = 20
+BrickColor = Color(0, 0, 1, 1)
+
+[node name="Brick7" parent="20Bricks" groups=["50Bricks"] instance=ExtResource("6_ya5aj")]
+position = Vector2(150, 0)
+PointValue = 20
+BrickColor = Color(0, 0, 1, 1)
+
+[node name="Brick8" parent="20Bricks" groups=["50Bricks"] instance=ExtResource("6_ya5aj")]
+position = Vector2(210, 0)
+PointValue = 20
+BrickColor = Color(0, 0, 1, 1)
+
+[node name="10Bricks" type="Node2D" parent="."]
+position = Vector2(260, 110)
+metadata/_edit_group_ = true
+
+[node name="Brick" parent="10Bricks" groups=["50Bricks"] instance=ExtResource("6_ya5aj")]
+position = Vector2(-210, 0)
+PointValue = 10
+BrickColor = Color(1, 0, 1, 1)
+
+[node name="Brick2" parent="10Bricks" groups=["50Bricks"] instance=ExtResource("6_ya5aj")]
+position = Vector2(-150, 0)
+PointValue = 10
+BrickColor = Color(1, 0, 1, 1)
+
+[node name="Brick3" parent="10Bricks" groups=["50Bricks"] instance=ExtResource("6_ya5aj")]
+position = Vector2(-90, 0)
+PointValue = 10
+BrickColor = Color(1, 0, 1, 1)
+
+[node name="Brick4" parent="10Bricks" groups=["50Bricks"] instance=ExtResource("6_ya5aj")]
+position = Vector2(-30, 0)
+PointValue = 10
+BrickColor = Color(1, 0, 1, 1)
+
+[node name="Brick5" parent="10Bricks" groups=["50Bricks"] instance=ExtResource("6_ya5aj")]
+position = Vector2(30, 0)
+PointValue = 10
+BrickColor = Color(1, 0, 1, 1)
+
+[node name="Brick6" parent="10Bricks" groups=["50Bricks"] instance=ExtResource("6_ya5aj")]
+position = Vector2(90, 0)
+PointValue = 10
+BrickColor = Color(1, 0, 1, 1)
+
+[node name="Brick7" parent="10Bricks" groups=["50Bricks"] instance=ExtResource("6_ya5aj")]
+position = Vector2(150, 0)
+PointValue = 10
+BrickColor = Color(1, 0, 1, 1)
+
+[node name="Brick8" parent="10Bricks" groups=["50Bricks"] instance=ExtResource("6_ya5aj")]
+position = Vector2(210, 0)
+PointValue = 10
+BrickColor = Color(1, 0, 1, 1)

@@ -17,7 +17,8 @@ public partial class Ball : CharacterBody2D
 		if (collision != null)
 		{
 			Vector2 bounceDirection = Vector2.Zero;
-
+			GD.Print("Name: " + ((Node)collision.GetCollider()).Name);
+			GD.Print("Normal: " + collision.GetNormal().ToString());
 			if (collision.GetCollider() is StaticBody2D staticBody)
 			{
 				if (staticBody.IsInGroup("Walls"))
@@ -29,22 +30,23 @@ public partial class Ball : CharacterBody2D
 					}
 
 					bounceDirection = collision.GetNormal();
-                }
+				}
 
 				else if (staticBody is Brick brick)
 				{
+					bounceDirection = collision.GetNormal().DirectionTo(Position);
 					brick.Hit();
-					bounceDirection = (Position - brick.Position).Normalized();
 				}
 			}
 
 			else if (collision.GetCollider() is CharacterBody2D charBody)
 			{
-				bounceDirection = (Position - charBody.Position).Normalized();
+				bounceDirection = -collision.GetNormal().DirectionTo(Position);
 			}
-
-            Velocity = Velocity.Bounce(bounceDirection);
-        }
+			
+			GD.Print("Bounce: " + bounceDirection.ToString());
+			Velocity = Velocity.Bounce(bounceDirection);
+		}
 	}
 	
 	public void Shoot()

@@ -17,7 +17,6 @@ public partial class Ball : CharacterBody2D
 		if (collision != null)
 		{
 			Vector2 bounceDirection = collision.GetNormal();
-			bool hitWall = false;
 			
 			GD.Print("Name: " + ((Node)collision.GetCollider()).Name);
 			GD.Print("Normal: " + collision.GetNormal().ToString());
@@ -31,7 +30,6 @@ public partial class Ball : CharacterBody2D
 						// TODO: QueueFree();
 					}
 
-					hitWall = true;
 					// bounceDirection = collision.GetNormal();
 				}
 
@@ -44,11 +42,12 @@ public partial class Ball : CharacterBody2D
 
 			else if (collision.GetCollider() is CharacterBody2D charBody)
 			{
-				// bounceDirection = charBody.GlobalPosition.DirectionTo(Position);
+				//bounceDirection = charBody.GlobalPosition.DirectionTo(Position);
+				bounceDirection = Position.DirectionTo(charBody.GlobalPosition);
 			}
 			
-			float clampingFactor = 1.5f;
 			/*
+			float clampingFactor = 1.5f;
 			if (!hitWall)
 			{
 				bounceDirection = new Vector2(
@@ -57,12 +56,22 @@ public partial class Ball : CharacterBody2D
 			}
 			*/
 			
-			GD.Print("Bounce: " + bounceDirection.ToString());
+			GD.Print("Incoming Direction: " + bounceDirection.ToString());
+			
 			Vector2 newVelocity = Velocity.Bounce(bounceDirection);
-			if (newVelocity == -Velocity)
+			
+			GD.Print("Bounce Direction: " + newVelocity.Normalized().ToString());
+			
+			// Protect against shallow bounces
+			float dotProduct = Velocity.Normalized().Dot(newVelocity.Normalized());
+			
+			float threshold = -0.97f;
+			GD.Print("Dot Product: " + dotProduct.ToString());
+			if (dotProduct < threshold)
 			{
-				newVelocity = newVelocity.Rotated((float)GD.RandRange(Mathf.Pi / 16.0, Mathf.Pi / 16.0));
+				GD.Print("Too shallow!");
 			}
+			
 			Velocity = newVelocity;
 		}
 	}

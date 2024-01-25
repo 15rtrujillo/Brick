@@ -16,7 +16,9 @@ public partial class Ball : CharacterBody2D
 		
 		if (collision != null)
 		{
-			Vector2 bounceDirection = Vector2.Zero;
+			Vector2 bounceDirection = collision.GetNormal();
+			bool hitWall = false;
+			
 			GD.Print("Name: " + ((Node)collision.GetCollider()).Name);
 			GD.Print("Normal: " + collision.GetNormal().ToString());
 			if (collision.GetCollider() is StaticBody2D staticBody)
@@ -29,23 +31,39 @@ public partial class Ball : CharacterBody2D
 						// TODO: QueueFree();
 					}
 
-					bounceDirection = collision.GetNormal();
+					hitWall = true;
+					// bounceDirection = collision.GetNormal();
 				}
 
 				else if (staticBody is Brick brick)
 				{
-					bounceDirection = collision.GetNormal().DirectionTo(Position);
+					// bounceDirection = brick.GlobalPosition.DirectionTo(Position);
 					brick.Hit();
 				}
 			}
 
 			else if (collision.GetCollider() is CharacterBody2D charBody)
 			{
-				bounceDirection = -collision.GetNormal().DirectionTo(Position);
+				// bounceDirection = charBody.GlobalPosition.DirectionTo(Position);
 			}
 			
+			float clampingFactor = 1.5f;
+			/*
+			if (!hitWall)
+			{
+				bounceDirection = new Vector2(
+					x: Mathf.Clamp(bounceDirection.X * clampingFactor, -1.0f, 1.0f),
+					y: bounceDirection.Y).Normalized();
+			}
+			*/
+			
 			GD.Print("Bounce: " + bounceDirection.ToString());
-			Velocity = Velocity.Bounce(bounceDirection);
+			Vector2 newVelocity = Velocity.Bounce(bounceDirection);
+			if (newVelocity == -Velocity)
+			{
+				newVelocity = newVelocity.Rotated((float)GD.RandRange(Mathf.Pi / 16.0, Mathf.Pi / 16.0));
+			}
+			Velocity = newVelocity;
 		}
 	}
 	

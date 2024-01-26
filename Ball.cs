@@ -43,7 +43,11 @@ public partial class Ball : CharacterBody2D
 			else if (collision.GetCollider() is CharacterBody2D charBody)
 			{
 				//bounceDirection = charBody.GlobalPosition.DirectionTo(Position);
-				bounceDirection = Position.DirectionTo(charBody.GlobalPosition);
+				float relativeCollisionPosition = (collision.GetPosition().X - charBody.GlobalPosition.X) / (charBody.GetNode<Sprite2D>("Sprite2D").Scale.X / 2.0f);
+				GD.Print("Global Paddle Position: " + charBody.Position.ToString());
+				GD.Print("Global Collision Position: " + collision.GetPosition().ToString());
+				GD.Print("Relative Collision Point: " + relativeCollisionPosition.ToString());
+				bounceDirection = new Vector2(relativeCollisionPosition, -1).Normalized();
 			}
 			
 			/*

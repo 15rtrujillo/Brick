@@ -25,7 +25,7 @@ public partial class Ball : CharacterBody2D
 					if (staticBody.Name == "BottomWall")
 					{
 						EmitSignal(SignalName.BallDied);
-						// TODO: QueueFree();
+						// TODO: QueueFree(); return;
 					}
 				}
 
@@ -43,7 +43,7 @@ public partial class Ball : CharacterBody2D
 			}
 			
 			float dotProduct = Velocity.Normalized().Dot(bounceDirection.Normalized());
-			GD.Print("Dot Product: " + dotProduct.ToString());
+
 			// Protect against shallow bounces
 			float threshold = -0.97f;
 

@@ -1,10 +1,9 @@
-[gd_scene load_steps=12 format=3 uid="uid://r06psij0kkvb"]
+[gd_scene load_steps=11 format=3 uid="uid://r06psij0kkvb"]
 
 [ext_resource type="Script" path="res://Main.cs" id="1_d7wv0"]
 [ext_resource type="Texture2D" uid="uid://b44pdjekna1bx" path="res://a_pixel.png" id="1_scgc4"]
 [ext_resource type="PackedScene" uid="uid://dtfxswhrleynk" path="res://Ball.tscn" id="2_03vcv"]
 [ext_resource type="PackedScene" uid="uid://dgb7ohxj4t123" path="res://Paddle.tscn" id="2_20s4g"]
-[ext_resource type="Script" path="res://Ball.cs" id="3_yhxu1"]
 [ext_resource type="PackedScene" uid="uid://cr455gv3tbqvc" path="res://Brick.tscn" id="6_ya5aj"]
 [ext_resource type="PackedScene" uid="uid://d13sqj6e1rx14" path="res://UI.tscn" id="7_iooxw"]
 
@@ -25,12 +24,10 @@ script = ExtResource("1_d7wv0")
 
 [node name="UI" parent="." instance=ExtResource("7_iooxw")]
 
-[node name="Ball" parent="." instance=ExtResource("2_03vcv")]
-position = Vector2(250, 605)
-script = ExtResource("3_yhxu1")
-
 [node name="Paddle" parent="." instance=ExtResource("2_20s4g")]
 position = Vector2(250, 630)
+
+[node name="Ball" parent="." instance=ExtResource("2_03vcv")]
 
 [node name="TopWall" type="StaticBody2D" parent="." groups=["Walls"]]
 position = Vector2(260, 10)

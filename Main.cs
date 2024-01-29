@@ -6,7 +6,6 @@ public partial class Main : Node
 	private Paddle _paddle;
 	private Ball _ball;
 	private UI _ui;
-	private int _score;
 	
 	public override void _Ready()
 	{
@@ -14,7 +13,9 @@ public partial class Main : Node
 		_ball = GetNode<Ball>("Ball");
 		_ui = GetNode<UI>("UI");
 		
-		_paddle.Ball = _ball;
+		_paddle.AttachedBall = _ball;
+
+		_ball.BallDied += OnBallDied;
 
 		ConnectBrickSignals();
 		
@@ -69,5 +70,17 @@ public partial class Main : Node
 	{
 		GameState.Score += points;
 		_ui.UpdateScore(GameState.Score);
+	}
+	
+	private void OnBallDied()
+	{
+		GameState.Lives -= 1;
+		_ui.UpdateLives(GameState.Lives);
+		
+		_ball = ResourceLoader.Load<PackedScene>("res://Ball.tscn").Instantiate<Ball>();
+		AddChild(_ball);
+		_ball.BallDied += OnBallDied;
+		_paddle.AttachedBall = _ball;
+		_paddle.BallAttached = true;
 	}
 }

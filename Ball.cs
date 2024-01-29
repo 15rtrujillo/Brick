@@ -25,7 +25,8 @@ public partial class Ball : CharacterBody2D
 					if (staticBody.Name == "BottomWall")
 					{
 						EmitSignal(SignalName.BallDied);
-						// TODO: QueueFree(); return;
+						QueueFree();
+						return;
 					}
 				}
 

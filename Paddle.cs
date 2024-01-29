@@ -5,7 +5,7 @@ public partial class Paddle : CharacterBody2D
 {
 	public float Speed { get; set; } = 300.0f;
 	
-	public CharacterBody2D Ball { get; set; }
+	public CharacterBody2D AttachedBall { get; set; }
 	public bool BallAttached { get; set; } = true;
 
 	public override void _PhysicsProcess(double delta)
@@ -27,7 +27,7 @@ public partial class Paddle : CharacterBody2D
 		
 		if (BallAttached)
 		{
-			Ball.Position = Position + (Vector2.Up * 25.0f);
+			AttachedBall.Position = Position + (Vector2.Up * 25.0f);
 		}
 	}
 }

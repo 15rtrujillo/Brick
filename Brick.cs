@@ -1,24 +1,27 @@
 using Godot;
 using System;
 
-public partial class Brick : StaticBody2D
+namespace BrickGame
 {
-	[Export]
-	public int PointValue { get; set; }
-	[Export]
-	public Color BrickColor { get; set; } = Colors.White;
-	
-	[Signal]
-	public delegate void BrickHitEventHandler(int points);
-	
-	public override void _Ready()
+	public partial class Brick : StaticBody2D
 	{
-		GetNode<Sprite2D>("Sprite2D").Modulate = BrickColor;
-	}
-	
-	public void Hit()
-	{
-		EmitSignal(SignalName.BrickHit, PointValue);
-		QueueFree();
+		[Export]
+		public int PointValue { get; set; }
+		[Export]
+		public Color BrickColor { get; set; } = Colors.White;
+		
+		public delegate void BrickHitEventHandler(int points);
+		public BrickHitEventHandler BrickHit;
+		
+		public override void _Ready()
+		{
+			GetNode<Sprite2D>("Sprite2D").Modulate = BrickColor;
+		}
+		
+		public void Hit()
+		{
+			BrickHit(PointValue);
+			QueueFree();
+		}
 	}
 }

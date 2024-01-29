@@ -1,86 +1,130 @@
 using Godot;
 using System;
 
-public partial class Main : Node
+namespace BrickGame
 {
-	private Paddle _paddle;
-	private Ball _ball;
-	private UI _ui;
-	
-	public override void _Ready()
+	public partial class Main : Node
 	{
-		_paddle = GetNode<Paddle>("Paddle");
-		_ball = GetNode<Ball>("Ball");
-		_ui = GetNode<UI>("UI");
+		private Paddle _paddle;
+		private Ball _ball;
+		private UI _ui;
+		private int _brickCount = 0;
+		private bool _started = false;
 		
-		_paddle.AttachedBall = _ball;
-
-		_ball.BallDied += OnBallDied;
-
-		ConnectBrickSignals();
-		
-		// ColorBoard();
-	}
-	
-	public override void _UnhandledKeyInput(InputEvent @event)
-	{
-		if (@event.IsActionPressed("fire"))
+		public override void _Ready()
 		{
-			_paddle.BallAttached = false;
-			_ball.Shoot();
+			_paddle = GetNode<Paddle>("Paddle");
+			_ball = GetNode<Ball>("Ball");
+			_ui = GetNode<UI>("UI");
+			
+			_paddle.AttachedBall = _ball;
+
+			_ball.BallDied = OnBallDied;
+			_ui.StartGame = OnStartGame;
+			
+			UpdateUI();
+			ConnectBrickSignals();
+			// ColorBoard();
 		}
-	}
-
-	private void ConnectBrickSignals()
-	{
-		var children = GetChildren();
-		foreach (Node child in children)
+		
+		public override void _UnhandledKeyInput(InputEvent @event)
 		{
-			if (child.Name.ToString().Contains("Bricks"))
+			if (@event.IsActionPressed("fire"))
 			{
-				var bricks = child.GetChildren();
-				foreach (Node subchild in bricks)
+				if (!_started) return;
+				
+				_paddle.BallAttached = false;
+				_ball.Shoot();
+			}
+		}
+		
+		private void UpdateUI()
+		{
+			_ui.UpdateScore(GameState.Score);
+			_ui.UpdateLives(GameState.Lives);
+			_ui.UpdateMessage($"Brick - Level {GameState.Level}");
+		}
+
+		private void ConnectBrickSignals()
+		{
+			var children = GetChildren();
+			foreach (Node child in children)
+			{
+				if (child.Name.ToString().Contains("Bricks"))
 				{
-					// Ensure we're dealing with a brick
-					if (subchild is Brick brick)
+					var bricks = child.GetChildren();
+					foreach (Node subchild in bricks)
 					{
-						brick.BrickHit += OnBrickHit;
+						// Ensure we're dealing with a brick
+						if (subchild is Brick brick)
+						{
+							brick.BrickHit = OnBrickHit;
+							_brickCount++;
+						}
 					}
 				}
 			}
 		}
-	}
-	
-	private void ColorBoard()
-	{
-		Color gameColor = new Color((float)GD.RandRange(0.1f, 1.0f), (float)GD.RandRange(0.1f, 1.0f), (float)GD.RandRange(0.1f, 1.0f));
 		
-		var children = GetChildren();
-		foreach (var child in children)
+		private void ColorBoard()
 		{
-			Sprite2D sprite = child.GetNodeOrNull<Sprite2D>("Sprite2D");
-			if (sprite != null)
+			Color gameColor = new Color((float)GD.RandRange(0.1f, 1.0f), (float)GD.RandRange(0.1f, 1.0f), (float)GD.RandRange(0.1f, 1.0f));
+			
+			var children = GetChildren();
+			foreach (var child in children)
 			{
-				sprite.Modulate = gameColor;
+				Sprite2D sprite = child.GetNodeOrNull<Sprite2D>("Sprite2D");
+				if (sprite != null)
+				{
+					sprite.Modulate = gameColor;
+				}
 			}
 		}
-	}
-
-	private void OnBrickHit(int points)
-	{
-		GameState.Score += points;
-		_ui.UpdateScore(GameState.Score);
-	}
-	
-	private void OnBallDied()
-	{
-		GameState.Lives -= 1;
-		_ui.UpdateLives(GameState.Lives);
 		
-		_ball = ResourceLoader.Load<PackedScene>("res://Ball.tscn").Instantiate<Ball>();
-		AddChild(_ball);
-		_ball.BallDied += OnBallDied;
-		_paddle.AttachedBall = _ball;
-		_paddle.BallAttached = true;
+		async private void GameOver()
+		{
+			GameState.UpdateHighScore();
+			GameState.Lives = 5;
+			
+			_ui.UpdateHighScore(GameState.HighScore);
+			_ui.GameOver();
+			await ToSignal(GetTree().CreateTimer(3.0), SceneTreeTimer.SignalName.Timeout);
+			GetTree().ReloadCurrentScene();
+		}
+		
+		private void Win()
+		{
+			GameState.UpdateHighScore();
+		}
+
+		private void OnBrickHit(int points)
+		{
+			GameState.Score += points;
+			_ui.UpdateScore(GameState.Score);
+			
+			_brickCount--;
+		}
+		
+		private void OnBallDied()
+		{
+			GameState.Lives -= 1;
+			_ui.UpdateLives(GameState.Lives);
+			
+			if (GameState.IsGameOver())
+			{
+				GameOver();
+			}
+			
+			_ball = ResourceLoader.Load<PackedScene>("res://Ball.tscn").Instantiate<Ball>();
+			AddChild(_ball);
+			_ball.BallDied = OnBallDied;
+			_paddle.AttachedBall = _ball;
+			_paddle.BallAttached = true;
+		}
+		
+		private void OnStartGame()
+		{
+			_started = true;
+		}
 	}
 }

@@ -57,3 +57,45 @@ layout_mode = 0
 offset_top = 720.0
 offset_right = 520.0
 offset_bottom = 740.0
+
+[node name="StartScreen" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.392157)
+
+[node name="StartButton" type="Button" parent="StartScreen"]
+layout_mode = 0
+offset_left = 210.0
+offset_top = 440.0
+offset_right = 310.0
+offset_bottom = 498.0
+text = "Start"
+
+[node name="MessageLabel" type="Label" parent="StartScreen"]
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = -25.0
+offset_bottom = 25.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Brick"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HighScoreLabel" type="Label" parent="StartScreen"]
+layout_mode = 0
+offset_top = 20.0
+offset_right = 520.0
+offset_bottom = 70.0
+text = "High Score: 0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[connection signal="pressed" from="StartScreen/StartButton" to="." method="OnStartButtonPressed"]

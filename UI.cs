@@ -51,6 +51,13 @@ namespace BrickGame
 			_startScreen.Show();
 			_startButton.Hide();
 		}
+
+		public void Win()
+		{
+			UpdateMessage("Congratulations!");
+			_startScreen.Show();
+			_startButton.Hide();
+		}
 		
 		private void OnStartButtonPressed()
 		{

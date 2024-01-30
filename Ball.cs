@@ -5,6 +5,7 @@ namespace BrickGame
 {
 	public partial class Ball : CharacterBody2D
 	{
+		// TODO: This needs to be set when a new ball is initialized.
 		public float LaunchSpeed { get; set; } = 300.0f;
 		
 		private bool _active = false;
@@ -68,6 +69,7 @@ namespace BrickGame
 				
 				Velocity = Velocity.Bounce(bounceDirection);
 			}
+			GD.Print(Velocity.Length());
 		}
 		
 		public void Shoot()

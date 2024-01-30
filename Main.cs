@@ -19,9 +19,12 @@ namespace BrickGame
 			
 			_paddle.AttachedBall = _ball;
 
+			_ball.LaunchSpeed += (GameState.Level - 1) * 50.0f;
+
 			_ball.BallDied = OnBallDied;
 			_ui.StartGame = OnStartGame;
-			
+
+			GameState.LoadHighScore();
 			UpdateUI();
 			ConnectBrickSignals();
 			// ColorBoard();
@@ -36,10 +39,20 @@ namespace BrickGame
 				_paddle.BallAttached = false;
 				_ball.Shoot();
 			}
+
+			// CHEATS!?!?!
+			if (@event is InputEventKey keyEvent)
+			{
+				if (keyEvent.IsPressed() && keyEvent.Keycode == Key.N)
+				{
+					Win();
+				}
+			}
 		}
 		
 		private void UpdateUI()
 		{
+			_ui.UpdateHighScore(GameState.HighScore);
 			_ui.UpdateScore(GameState.Score);
 			_ui.UpdateLives(GameState.Lives);
 			_ui.UpdateMessage($"Brick - Level {GameState.Level}");
@@ -67,8 +80,8 @@ namespace BrickGame
 		}
 		
 		private void ColorBoard()
-		{
-			Color gameColor = new Color((float)GD.RandRange(0.1f, 1.0f), (float)GD.RandRange(0.1f, 1.0f), (float)GD.RandRange(0.1f, 1.0f));
+        {
+            Color gameColor = new Color((float)GD.RandRange(0.1f, 1.0f), (float)GD.RandRange(0.1f, 1.0f), (float)GD.RandRange(0.1f, 1.0f));
 			
 			var children = GetChildren();
 			foreach (var child in children)
@@ -81,7 +94,7 @@ namespace BrickGame
 			}
 		}
 		
-		async private void GameOver()
+		private async void GameOver()
 		{
 			GameState.UpdateHighScore();
 			GameState.Lives = 5;
@@ -92,10 +105,18 @@ namespace BrickGame
 			GetTree().ReloadCurrentScene();
 		}
 		
-		private void Win()
+		private async void Win()
 		{
+			_ball.QueueFree();
+
 			GameState.UpdateHighScore();
-		}
+			GameState.Level += 1;
+
+            _ui.UpdateHighScore(GameState.HighScore);
+            _ui.Win();
+            await ToSignal(GetTree().CreateTimer(3.0), SceneTreeTimer.SignalName.Timeout);
+            GetTree().ReloadCurrentScene();
+        }
 
 		private void OnBrickHit(int points)
 		{
@@ -103,6 +124,11 @@ namespace BrickGame
 			_ui.UpdateScore(GameState.Score);
 			
 			_brickCount--;
+
+			if (_brickCount <= 0)
+			{
+				Win();
+			}
 		}
 		
 		private void OnBallDied()

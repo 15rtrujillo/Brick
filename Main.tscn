@@ -24,6 +24,8 @@ script = ExtResource("1_d7wv0")
 
 [node name="TopWall" type="StaticBody2D" parent="." groups=["Walls"]]
 position = Vector2(260, 10)
+collision_layer = 8
+collision_mask = 5
 metadata/_edit_group_ = true
 
 [node name="Sprite2D" type="Sprite2D" parent="TopWall"]
@@ -35,6 +37,8 @@ shape = SubResource("RectangleShape2D_qiwc1")
 
 [node name="LeftWall" type="StaticBody2D" parent="." groups=["Walls"]]
 position = Vector2(10, 370)
+collision_layer = 8
+collision_mask = 5
 metadata/_edit_group_ = true
 
 [node name="Sprite2D" type="Sprite2D" parent="LeftWall"]
@@ -46,6 +50,8 @@ shape = SubResource("RectangleShape2D_xen5a")
 
 [node name="RightWall" type="StaticBody2D" parent="." groups=["Walls"]]
 position = Vector2(510, 370)
+collision_layer = 8
+collision_mask = 5
 metadata/_edit_group_ = true
 
 [node name="Sprite2D" type="Sprite2D" parent="RightWall"]
@@ -57,6 +63,8 @@ shape = SubResource("RectangleShape2D_tubqn")
 
 [node name="BottomWall" type="StaticBody2D" parent="." groups=["Walls"]]
 position = Vector2(260, 730)
+collision_layer = 8
+collision_mask = 5
 metadata/_edit_group_ = true
 
 [node name="Sprite2D" type="Sprite2D" parent="BottomWall"]

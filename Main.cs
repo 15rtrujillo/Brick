@@ -5,12 +5,13 @@ using System.Threading.Tasks;
 namespace BrickGame
 {
 	public partial class Main : Node
-	{
+	{	
 		private Paddle _paddle;
 		private Ball _ball;
 		private UI _ui;
 		private int _brickCount = 0;
 		private bool _started = false;
+		private PickupDrops _pickupDrops = new PickupDrops();
 		
 		public override void _Ready()
 		{
@@ -124,7 +125,7 @@ namespace BrickGame
 			GetTree().ReloadCurrentScene();
 		}
 
-		private void OnBrickHit(int points)
+		private void OnBrickHit(int points, Vector2 position)
 		{
 			GameState.Score += points;
 			_ui.UpdateScore(GameState.Score);
@@ -134,7 +135,15 @@ namespace BrickGame
 			if (_brickCount <= 0)
 			{
 				Win();
+				return;
 			}
+			
+			PackedScene pickup = _pickupDrops.RollPickup();
+			if (pickup == null) return;
+			Pickup pickupNode = pickup.Instantiate<Pickup>();
+			AddChild(pickupNode);
+			pickupNode.Position = position;
+			pickupNode.Velocity = Vector2.Up * new Vector2(0, 300.0f);
 		}
 		
 		private void OnBallDied()

@@ -68,7 +68,6 @@ namespace BrickGame
 				
 				Velocity = Velocity.Bounce(bounceDirection);
 			}
-			GD.Print(Velocity.Length());
 		}
 		
 		public void Shoot()

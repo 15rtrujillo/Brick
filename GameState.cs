@@ -34,7 +34,6 @@ namespace BrickGame
 
 			using FileAccess highScoreFile = FileAccess.Open(_highScoreFilePath, FileAccess.ModeFlags.Write);
 			highScoreFile.Store32((uint)HighScore);
-			
 		}
 	}
 }

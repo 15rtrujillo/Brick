@@ -1,0 +1,17 @@
+[gd_scene load_steps=2 format=3 uid="uid://crajr7bdbm4wk"]
+
+[ext_resource type="Script" path="res://pickups/Pickup.cs" id="1_gpkwr"]
+
+[node name="Pickup" type="Area2D"]
+collision_layer = 2
+collision_mask = 4
+script = ExtResource("1_gpkwr")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+
+[node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="."]
+rect = Rect2(-30, -30, 60, 60)
+
+[connection signal="screen_exited" from="VisibleOnScreenNotifier2D" to="." method="OnVisibleOnScreenNotifier2DScreenExited"]

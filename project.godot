@@ -46,6 +46,13 @@ move_left={
 ]
 }
 
+[layer_names]
+
+2d_physics/layer_1="ball"
+2d_physics/layer_2="pickup"
+2d_physics/layer_3="paddle"
+2d_physics/layer_4="world"
+
 [rendering]
 
 environment/defaults/default_clear_color=Color(0, 0, 0, 1)

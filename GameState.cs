@@ -19,22 +19,22 @@ namespace BrickGame
 
 		public static void LoadHighScore()
 		{
-            if (FileAccess.FileExists(_highScoreFilePath))
-            {
-                using FileAccess highScoreFile = FileAccess.Open(_highScoreFilePath, FileAccess.ModeFlags.Read);
-                HighScore = (int)highScoreFile.Get32();
-            }
-        }
+			if (FileAccess.FileExists(_highScoreFilePath))
+			{
+				using FileAccess highScoreFile = FileAccess.Open(_highScoreFilePath, FileAccess.ModeFlags.Read);
+				HighScore = (int)highScoreFile.Get32();
+			}
+		}
 		
 		public static void UpdateHighScore()
 		{
 			if (Score <= HighScore) return;
 
-            HighScore = Score;
+			HighScore = Score;
 
 			using FileAccess highScoreFile = FileAccess.Open(_highScoreFilePath, FileAccess.ModeFlags.Write);
 			highScoreFile.Store32((uint)HighScore);
-            
+			
 		}
 	}
 }

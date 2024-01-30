@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Threading.Tasks;
 
 namespace BrickGame
 {
@@ -19,7 +20,7 @@ namespace BrickGame
 			
 			_paddle.AttachedBall = _ball;
 
-			_ball.LaunchSpeed += (GameState.Level - 1) * 50.0f;
+			_ball.LaunchSpeed += GetLevelSpeedModifier();
 
 			_ball.BallDied = OnBallDied;
 			_ui.StartGame = OnStartGame;
@@ -80,8 +81,8 @@ namespace BrickGame
 		}
 		
 		private void ColorBoard()
-        {
-            Color gameColor = new Color((float)GD.RandRange(0.1f, 1.0f), (float)GD.RandRange(0.1f, 1.0f), (float)GD.RandRange(0.1f, 1.0f));
+		{
+			Color gameColor = new Color((float)GD.RandRange(0.1f, 1.0f), (float)GD.RandRange(0.1f, 1.0f), (float)GD.RandRange(0.1f, 1.0f));
 			
 			var children = GetChildren();
 			foreach (var child in children)
@@ -94,6 +95,11 @@ namespace BrickGame
 			}
 		}
 		
+		private float GetLevelSpeedModifier()
+		{
+			return (GameState.Level - 1) * 50.0f;
+		}
+		
 		private async void GameOver()
 		{
 			GameState.UpdateHighScore();
@@ -101,7 +107,7 @@ namespace BrickGame
 			
 			_ui.UpdateHighScore(GameState.HighScore);
 			_ui.GameOver();
-			await ToSignal(GetTree().CreateTimer(3.0), SceneTreeTimer.SignalName.Timeout);
+			await Task.Delay(3000);
 			GetTree().ReloadCurrentScene();
 		}
 		
@@ -112,11 +118,11 @@ namespace BrickGame
 			GameState.UpdateHighScore();
 			GameState.Level += 1;
 
-            _ui.UpdateHighScore(GameState.HighScore);
-            _ui.Win();
-            await ToSignal(GetTree().CreateTimer(3.0), SceneTreeTimer.SignalName.Timeout);
-            GetTree().ReloadCurrentScene();
-        }
+			_ui.UpdateHighScore(GameState.HighScore);
+			_ui.Win();
+			await Task.Delay(3000);
+			GetTree().ReloadCurrentScene();
+		}
 
 		private void OnBrickHit(int points)
 		{
@@ -139,10 +145,12 @@ namespace BrickGame
 			if (GameState.IsGameOver())
 			{
 				GameOver();
+				return;
 			}
 			
 			_ball = ResourceLoader.Load<PackedScene>("res://Ball.tscn").Instantiate<Ball>();
 			AddChild(_ball);
+			_ball.LaunchSpeed += GetLevelSpeedModifier();
 			_ball.BallDied = OnBallDied;
 			_paddle.AttachedBall = _ball;
 			_paddle.BallAttached = true;

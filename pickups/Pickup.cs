@@ -1,7 +1,7 @@
 using Godot;
 using System;
 
-namespace BrickGame
+namespace BrickGame.Pickups
 {
 	public partial class Pickup : RigidBody2D
 	{

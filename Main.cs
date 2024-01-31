@@ -2,6 +2,8 @@ using Godot;
 using System;
 using System.Threading.Tasks;
 
+using BrickGame.Pickups;
+
 namespace BrickGame
 {
 	public partial class Main : Node

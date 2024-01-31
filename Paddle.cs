@@ -2,6 +2,8 @@ using Godot;
 using System;
 using System.Threading.Tasks;
 
+using BrickGame.Pickups;
+
 namespace BrickGame
 {
 	public partial class Paddle : CharacterBody2D
@@ -66,6 +68,7 @@ namespace BrickGame
 			
 			Vector2 shapeSize = rectangle.Size;
 			Vector2 spriteScale = sprite.Scale;
+
 			_bigPaddle = true;
 			rectangle.Size = shapeSize * new Vector2(2, 1);
 			sprite.Scale = spriteScale * new Vector2(2, 1);
@@ -86,9 +89,15 @@ namespace BrickGame
 		public void PickupTouched(PickupType pickupType)
 		{
 			if (pickupType == PickupType.BigPaddle
-			&& !_bigPaddle)
+				&& !_bigPaddle)
 			{
 				BigPaddle();
+				return;
+			}
+
+			else if (pickupType == PickupType.Magnet)
+			{
+				_magnet = true;
 				return;
 			}
 			

@@ -1,12 +1,13 @@
 using Godot;
 using System;
 
-namespace BrickGame
+namespace BrickGame.Pickups
 {
 	public enum PickupType
 	{
 		None,
 		OneUp,
-		BigPaddle
+		BigPaddle,
+		Magnet
 	}
 }

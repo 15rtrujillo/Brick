@@ -10,6 +10,7 @@ size = Vector2(60, 60)
 size = Vector2(60, 60)
 
 [node name="OneUp" instance=ExtResource("1_aspm8")]
+Type = 1
 
 [node name="Sprite2D" parent="." index="0"]
 texture = ExtResource("2_as7q0")

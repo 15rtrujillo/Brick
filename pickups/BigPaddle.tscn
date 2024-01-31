@@ -10,6 +10,7 @@ size = Vector2(60, 60)
 size = Vector2(60, 60)
 
 [node name="BigPaddle" instance=ExtResource("1_w3v0c")]
+Type = 2
 
 [node name="Sprite2D" parent="." index="0"]
 texture = ExtResource("2_4xeqy")

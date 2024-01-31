@@ -5,6 +5,9 @@ namespace BrickGame
 {
 	public partial class Pickup : RigidBody2D
 	{
+		[Export]
+		public PickupType Type { get; set; } = PickupType.None;
+		
 		private void OnVisibleOnScreenNotifier2DScreenExited()
 		{
 			QueueFree();
@@ -12,8 +15,11 @@ namespace BrickGame
 
 		private void OnArea2DBodyEntered(Node2D body)
 		{
-			GD.Print("Hit!");
+			if (body is Paddle paddle)
+			{
+				paddle.PickupTouched(Type);
+			}
+			QueueFree();
 		}
-
-    }
+	}
 }

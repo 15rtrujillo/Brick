@@ -22,6 +22,13 @@ namespace BrickGame
 			_paddle.AttachedBall = _ball;
 
 			_ball.LaunchSpeed += GetLevelSpeedModifier();
+			
+			/* Research
+			PhysicsServer2D.AreaSetParam(
+				GetWorld2D().GetSpace(),
+				2,
+				new Vector2(0,0));
+			*/
 
 			_ball.BallDied = OnBallDied;
 			_ui.StartGame = OnStartGame;
@@ -143,7 +150,10 @@ namespace BrickGame
 			Pickup pickupNode = pickup.Instantiate<Pickup>();
 			AddChild(pickupNode);
 			pickupNode.Position = position;
-			pickupNode.ApplyImpulse(Vector2.Up * new Vector2(0, 500.0f));
+			
+			Vector2 direction = Vector2.Up.Rotated((float)GD.RandRange(-Mathf.Pi / 16, Mathf.Pi / 16)).Normalized();
+			pickupNode.ApplyImpulse(direction * 500.0f);
+			pickupNode.ApplyTorqueImpulse(direction.X * 1800.0f);
 		}
 		
 		private void OnBallDied()

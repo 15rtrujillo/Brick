@@ -1,14 +1,19 @@
 using Godot;
 using System;
+using System.Threading.Tasks;
 
 namespace BrickGame
 {
 	public partial class Paddle : CharacterBody2D
 	{
 		public float Speed { get; set; } = 300.0f;
-		
 		public Ball AttachedBall { get; set; }
 		public bool BallAttached { get; set; } = true;
+		
+		public delegate void ApplyPickupEventHandler(PickupType pickupType);
+		public ApplyPickupEventHandler ApplyPickup;
+		
+		private bool _bigPaddle = false;
 
 		public override void _PhysicsProcess(double delta)
 		{
@@ -30,6 +35,40 @@ namespace BrickGame
 			if (BallAttached)
 			{
 				AttachedBall.Position = Position + (Vector2.Up * 25.0f);
+			}
+		}
+		
+		public async void BigPaddle()
+		{
+			CollisionShape2D shape = GetNode<CollisionShape2D>("CollisionShape2D");
+			RectangleShape2D rectangle = (RectangleShape2D)shape.Shape;
+			Sprite2D sprite = GetNode<Sprite2D>("Sprite2D");
+			
+			Vector2 shapeSize = rectangle.Size;
+			Vector2 spriteScale = sprite.Scale;
+			
+			rectangle.Size = shapeSize * new Vector2(2, 1);
+			sprite.Scale = spriteScale * new Vector2(2, 1);
+			
+			_bigPaddle = true;
+			await Task.Delay(10000);
+			_bigPaddle = false;
+			
+			rectangle.Size = shapeSize;
+			sprite.Scale = spriteScale;
+		}
+		
+		public void PickupTouched(PickupType pickupType)
+		{
+			if (pickupType == PickupType.OneUp)
+			{
+				// ApplyPickup(pickupType);
+			}
+			
+			else if (pickupType == PickupType.BigPaddle
+			&& !_bigPaddle)
+			{
+				BigPaddle();
 			}
 		}
 	}

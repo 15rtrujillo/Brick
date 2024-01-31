@@ -7,13 +7,14 @@ namespace BrickGame
 	public partial class Paddle : CharacterBody2D
 	{
 		public float Speed { get; set; } = 300.0f;
-		public Ball AttachedBall { get; set; }
-		public bool BallAttached { get; set; } = true;
 		
 		public delegate void ApplyPickupEventHandler(PickupType pickupType);
 		public ApplyPickupEventHandler ApplyPickup;
 		
+		private Ball _attachedBall;
+		private bool _ballAttached;
 		private bool _bigPaddle = false;
+		private bool _magnet = false;
 
 		public override void _PhysicsProcess(double delta)
 		{
@@ -29,13 +30,32 @@ namespace BrickGame
 				Velocity += Vector2.Right;
 			}
 			
+			Vector2 oldPaddlePos = Position;
+			
 			Velocity *= Speed;
 			MoveAndCollide(Velocity * (float)delta);
 			
-			if (BallAttached)
+			if (_ballAttached)
 			{
-				AttachedBall.Position = Position + (Vector2.Up * 25.0f);
+				_attachedBall.Position += Position - oldPaddlePos;
 			}
+		}
+		
+		public override void _UnhandledKeyInput(InputEvent @event)
+		{
+			if (@event.IsActionPressed("fire"))
+			{
+				if (!GameState.Running) return;
+				
+				_ballAttached = false;
+				_attachedBall.Shoot();
+			}
+		}
+		
+		public void AttachNewBall(Ball ball)
+		{
+			_attachedBall = ball;
+			_ballAttached = true;
 		}
 		
 		public async void BigPaddle()
@@ -57,18 +77,22 @@ namespace BrickGame
 			_bigPaddle = false;
 		}
 		
+		public void BallTouched()
+		{
+			if (!_magnet) return;
+			_ballAttached = true;
+		}
+		
 		public void PickupTouched(PickupType pickupType)
 		{
-			if (pickupType == PickupType.OneUp)
-			{
-				// ApplyPickup(pickupType);
-			}
-			
-			else if (pickupType == PickupType.BigPaddle
+			if (pickupType == PickupType.BigPaddle
 			&& !_bigPaddle)
 			{
 				BigPaddle();
+				return;
 			}
+			
+			ApplyPickup(pickupType);
 		}
 	}
 }

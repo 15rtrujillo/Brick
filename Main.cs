@@ -10,7 +10,6 @@ namespace BrickGame
 		private Ball _ball;
 		private UI _ui;
 		private int _brickCount = 0;
-		private bool _started = false;
 		private PickupDrops _pickupDrops = new PickupDrops();
 		
 		public override void _Ready()
@@ -19,9 +18,9 @@ namespace BrickGame
 			_ball = GetNode<Ball>("Ball");
 			_ui = GetNode<UI>("UI");
 			
-			_paddle.AttachedBall = _ball;
+			_paddle.AttachNewBall(_ball);
 			
-			_paddle.Speed += GetLevelSpeedModifier() * 0.25f;
+			_paddle.Speed += GetLevelSpeedModifier() * 0.3f;
 			_ball.LaunchSpeed += GetLevelSpeedModifier();
 			
 			PhysicsServer2D.AreaSetParam(
@@ -29,7 +28,7 @@ namespace BrickGame
 				PhysicsServer2D.AreaParameter.Gravity,
 				300 + GetLevelSpeedModifier());
 
-
+			_paddle.ApplyPickup = OnApplyPickup;
 			_ball.BallDied = OnBallDied;
 			_ui.StartGame = OnStartGame;
 
@@ -41,14 +40,6 @@ namespace BrickGame
 		
 		public override void _UnhandledKeyInput(InputEvent @event)
 		{
-			if (@event.IsActionPressed("fire"))
-			{
-				if (!_started) return;
-				
-				_paddle.BallAttached = false;
-				_ball.Shoot();
-			}
-
 			// CHEATS!?!?!
 			if (@event is InputEventKey keyEvent)
 			{
@@ -156,6 +147,14 @@ namespace BrickGame
 			pickupNode.ApplyTorqueImpulse(direction.X * 1800.0f);
 		}
 		
+		private void OnApplyPickup(PickupType type)
+		{
+			if (type == PickupType.OneUp)
+			{
+				GameState.Lives += 1;
+			}
+		}
+		
 		private void OnBallDied()
 		{
 			GameState.Lives -= 1;
@@ -169,15 +168,15 @@ namespace BrickGame
 			
 			_ball = ResourceLoader.Load<PackedScene>("res://Ball.tscn").Instantiate<Ball>();
 			AddChild(_ball);
+			_ball.Position = _paddle.Position + (Vector2.Up * 25.0f);
 			_ball.LaunchSpeed += GetLevelSpeedModifier();
 			_ball.BallDied = OnBallDied;
-			_paddle.AttachedBall = _ball;
-			_paddle.BallAttached = true;
+			_paddle.AttachNewBall(_ball);
 		}
 		
 		private void OnStartGame()
 		{
-			_started = true;
+			GameState.Running = true;
 		}
 	}
 }

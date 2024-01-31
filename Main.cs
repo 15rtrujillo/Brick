@@ -143,7 +143,7 @@ namespace BrickGame
 			Pickup pickupNode = pickup.Instantiate<Pickup>();
 			AddChild(pickupNode);
 			pickupNode.Position = position;
-			pickupNode.Velocity = Vector2.Up * new Vector2(0, 300.0f);
+			pickupNode.ApplyImpulse(Vector2.Up * new Vector2(0, 500.0f));
 		}
 		
 		private void OnBallDied()

@@ -2,9 +2,9 @@
 
 [ext_resource type="Script" path="res://pickups/Pickup.cs" id="1_gpkwr"]
 
-[node name="Pickup" type="Area2D"]
-collision_layer = 2
-collision_mask = 4
+[node name="Pickup" type="RigidBody2D"]
+collision_layer = 0
+collision_mask = 0
 script = ExtResource("1_gpkwr")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
@@ -14,4 +14,10 @@ script = ExtResource("1_gpkwr")
 [node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="."]
 rect = Rect2(-30, -30, 60, 60)
 
-[connection signal="screen_exited" from="VisibleOnScreenNotifier2D" to="." method="OnVisibleOnScreenNotifier2DScreenExited"]
+[node name="Area2D" type="Area2D" parent="."]
+collision_layer = 2
+collision_mask = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+
+[connection signal="body_entered" from="Area2D" to="." method="OnArea2DBodyEntered"]

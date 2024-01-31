@@ -1,9 +1,12 @@
-[gd_scene load_steps=4 format=3 uid="uid://ehll3wuwya8r"]
+[gd_scene load_steps=5 format=3 uid="uid://ehll3wuwya8r"]
 
 [ext_resource type="PackedScene" uid="uid://crajr7bdbm4wk" path="res://pickups/Pickup.tscn" id="1_aspm8"]
 [ext_resource type="Texture2D" uid="uid://dawfhdg31cs52" path="res://art/1up.png" id="2_as7q0"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_morxo"]
+size = Vector2(60, 60)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_iw5mi"]
 size = Vector2(60, 60)
 
 [node name="OneUp" instance=ExtResource("1_aspm8")]
@@ -14,3 +17,6 @@ texture = ExtResource("2_as7q0")
 [node name="CollisionShape2D" parent="." index="1"]
 shape = SubResource("RectangleShape2D_morxo")
 debug_color = Color(0, 0.6, 0.701961, 0.419608)
+
+[node name="CollisionShape2D" parent="Area2D" index="0"]
+shape = SubResource("RectangleShape2D_iw5mi")

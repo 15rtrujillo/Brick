@@ -46,16 +46,15 @@ namespace BrickGame
 			
 			Vector2 shapeSize = rectangle.Size;
 			Vector2 spriteScale = sprite.Scale;
-			
+			_bigPaddle = true;
 			rectangle.Size = shapeSize * new Vector2(2, 1);
 			sprite.Scale = spriteScale * new Vector2(2, 1);
 			
-			_bigPaddle = true;
 			await Task.Delay(10000);
-			_bigPaddle = false;
 			
 			rectangle.Size = shapeSize;
 			sprite.Scale = spriteScale;
+			_bigPaddle = false;
 		}
 		
 		public void PickupTouched(PickupType pickupType)

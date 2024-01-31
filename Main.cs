@@ -20,15 +20,15 @@ namespace BrickGame
 			_ui = GetNode<UI>("UI");
 			
 			_paddle.AttachedBall = _ball;
-
+			
+			_paddle.Speed += GetLevelSpeedModifier() * 0.25f;
 			_ball.LaunchSpeed += GetLevelSpeedModifier();
 			
-			/* Research
 			PhysicsServer2D.AreaSetParam(
-				GetWorld2D().GetSpace(),
-				2,
-				new Vector2(0,0));
-			*/
+				GetViewport().FindWorld2D().Space,
+				PhysicsServer2D.AreaParameter.Gravity,
+				300 + GetLevelSpeedModifier());
+
 
 			_ball.BallDied = OnBallDied;
 			_ui.StartGame = OnStartGame;
@@ -105,7 +105,7 @@ namespace BrickGame
 		
 		private float GetLevelSpeedModifier()
 		{
-			return (GameState.Level - 1) * 50.0f;
+			return (GameState.Level - 1) * 75.0f;
 		}
 		
 		private async void GameOver()
@@ -152,7 +152,7 @@ namespace BrickGame
 			pickupNode.Position = position;
 			
 			Vector2 direction = Vector2.Up.Rotated((float)GD.RandRange(-Mathf.Pi / 16, Mathf.Pi / 16)).Normalized();
-			pickupNode.ApplyImpulse(direction * 500.0f);
+			pickupNode.ApplyImpulse(direction * (250.0f + GetLevelSpeedModifier() * 0.5f));
 			pickupNode.ApplyTorqueImpulse(direction.X * 1800.0f);
 		}
 		

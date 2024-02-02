@@ -30,9 +30,9 @@ namespace BrickGame
 				PhysicsServer2D.AreaParameter.Gravity,
 				300 + GetLevelSpeedModifier());
 
-			_paddle.ApplyPickup = OnApplyPickup;
-			_ball.BallDied = OnBallDied;
-			_ui.StartGame = OnStartGame;
+			_paddle.ApplyPickup += OnApplyPickup;
+			_ball.BallDied += OnBallDied;
+			_ui.StartGame += OnStartGame;
 
 			GameState.LoadHighScore();
 			UpdateUI();
@@ -73,7 +73,7 @@ namespace BrickGame
 						// Ensure we're dealing with a brick
 						if (subchild is Brick brick)
 						{
-							brick.BrickHit = OnBrickHit;
+							brick.BrickHit += OnBrickHit;
 							_brickCount++;
 						}
 					}
@@ -154,6 +154,7 @@ namespace BrickGame
 			if (type == PickupType.OneUp)
 			{
 				GameState.Lives += 1;
+				_ui.UpdateLives(GameState.Lives);
 			}
 		}
 		
@@ -172,7 +173,7 @@ namespace BrickGame
 			AddChild(_ball);
 			_ball.Position = _paddle.Position + (Vector2.Up * 25.0f);
 			_ball.LaunchSpeed += GetLevelSpeedModifier();
-			_ball.BallDied = OnBallDied;
+			_ball.BallDied += OnBallDied;
 			_paddle.AttachNewBall(_ball);
 		}
 		

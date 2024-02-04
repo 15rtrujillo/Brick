@@ -2,6 +2,8 @@ using Godot;
 using System;
 using System.Threading.Tasks;
 
+using BrickGame.Pickups;
+
 namespace BrickGame
 {
 	public partial class Main : Node
@@ -10,7 +12,7 @@ namespace BrickGame
 		private Ball _ball;
 		private UI _ui;
 		private int _brickCount = 0;
-		private bool _started = false;
+		private PickupDrops _pickupDrops = new PickupDrops();
 		
 		public override void _Ready()
 		{
@@ -18,12 +20,19 @@ namespace BrickGame
 			_ball = GetNode<Ball>("Ball");
 			_ui = GetNode<UI>("UI");
 			
-			_paddle.AttachedBall = _ball;
-
+			_paddle.AttachNewBall(_ball);
+			
+			_paddle.Speed += GetLevelSpeedModifier() * 0.3f;
 			_ball.LaunchSpeed += GetLevelSpeedModifier();
+			
+			PhysicsServer2D.AreaSetParam(
+				GetViewport().FindWorld2D().Space,
+				PhysicsServer2D.AreaParameter.Gravity,
+				300 + GetLevelSpeedModifier());
 
-			_ball.BallDied = OnBallDied;
-			_ui.StartGame = OnStartGame;
+			_paddle.ApplyPickup += OnApplyPickup;
+			_ball.BallDied += OnBallDied;
+			_ui.StartGame += OnStartGame;
 
 			GameState.LoadHighScore();
 			UpdateUI();
@@ -33,14 +42,6 @@ namespace BrickGame
 		
 		public override void _UnhandledKeyInput(InputEvent @event)
 		{
-			if (@event.IsActionPressed("fire"))
-			{
-				if (!_started) return;
-				
-				_paddle.BallAttached = false;
-				_ball.Shoot();
-			}
-
 			// CHEATS!?!?!
 			if (@event is InputEventKey keyEvent)
 			{
@@ -72,7 +73,7 @@ namespace BrickGame
 						// Ensure we're dealing with a brick
 						if (subchild is Brick brick)
 						{
-							brick.BrickHit = OnBrickHit;
+							brick.BrickHit += OnBrickHit;
 							_brickCount++;
 						}
 					}
@@ -97,7 +98,7 @@ namespace BrickGame
 		
 		private float GetLevelSpeedModifier()
 		{
-			return (GameState.Level - 1) * 50.0f;
+			return (GameState.Level - 1) * 75.0f;
 		}
 		
 		private async void GameOver()
@@ -124,7 +125,7 @@ namespace BrickGame
 			GetTree().ReloadCurrentScene();
 		}
 
-		private void OnBrickHit(int points)
+		private void OnBrickHit(int points, Vector2 position)
 		{
 			GameState.Score += points;
 			_ui.UpdateScore(GameState.Score);
@@ -134,6 +135,26 @@ namespace BrickGame
 			if (_brickCount <= 0)
 			{
 				Win();
+				return;
+			}
+			
+			PackedScene pickup = _pickupDrops.RollPickup();
+			if (pickup == null) return;
+			Pickup pickupNode = pickup.Instantiate<Pickup>();
+			AddChild(pickupNode);
+			pickupNode.Position = position;
+			
+			Vector2 direction = Vector2.Up.Rotated((float)GD.RandRange(-Mathf.Pi / 16, Mathf.Pi / 16)).Normalized();
+			pickupNode.ApplyImpulse(direction * (250.0f + GetLevelSpeedModifier() * 0.5f));
+			pickupNode.ApplyTorqueImpulse(direction.X * 1800.0f);
+		}
+		
+		private void OnApplyPickup(PickupType type)
+		{
+			if (type == PickupType.OneUp)
+			{
+				GameState.Lives += 1;
+				_ui.UpdateLives(GameState.Lives);
 			}
 		}
 		
@@ -150,15 +171,15 @@ namespace BrickGame
 			
 			_ball = ResourceLoader.Load<PackedScene>("res://Ball.tscn").Instantiate<Ball>();
 			AddChild(_ball);
+			_ball.Position = _paddle.Position + (Vector2.Up * 25.0f);
 			_ball.LaunchSpeed += GetLevelSpeedModifier();
-			_ball.BallDied = OnBallDied;
-			_paddle.AttachedBall = _ball;
-			_paddle.BallAttached = true;
+			_ball.BallDied += OnBallDied;
+			_paddle.AttachNewBall(_ball);
 		}
 		
 		private void OnStartGame()
 		{
-			_started = true;
+			GameState.Running = true;
 		}
 	}
 }

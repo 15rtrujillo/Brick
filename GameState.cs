@@ -9,6 +9,7 @@ namespace BrickGame
 		public static int HighScore { get; private set; } = 0;
 		public static int Lives { get; set; } = 4;
 		public static int Level { get; set; } = 1;
+		public static bool Running { get; set; } = false;
 
 		private static readonly string _highScoreFilePath = "res://high.score";
 		
@@ -34,7 +35,6 @@ namespace BrickGame
 
 			using FileAccess highScoreFile = FileAccess.Open(_highScoreFilePath, FileAccess.ModeFlags.Write);
 			highScoreFile.Store32((uint)HighScore);
-			
 		}
 	}
 }

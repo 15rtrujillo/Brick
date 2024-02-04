@@ -1,0 +1,10 @@
+[gd_scene load_steps=3 format=3 uid="uid://d0jphuyo5yfxa"]
+
+[ext_resource type="PackedScene" uid="uid://crajr7bdbm4wk" path="res://pickups/Pickup.tscn" id="1_4rhmx"]
+[ext_resource type="Texture2D" uid="uid://c3r2yjx4vdvjj" path="res://art/magnet.png" id="2_1ex3a"]
+
+[node name="Magnet" instance=ExtResource("1_4rhmx")]
+Type = 3
+
+[node name="Sprite2D" parent="." index="0"]
+texture = ExtResource("2_1ex3a")

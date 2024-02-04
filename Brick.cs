@@ -10,7 +10,7 @@ namespace BrickGame
 		[Export]
 		public Color BrickColor { get; set; } = Colors.White;
 		
-		public delegate void BrickHitEventHandler(int points);
+		public delegate void BrickHitEventHandler(int points, Vector2 position);
 		public BrickHitEventHandler BrickHit;
 		
 		public override void _Ready()
@@ -20,7 +20,7 @@ namespace BrickGame
 		
 		public void Hit()
 		{
-			BrickHit(PointValue);
+			BrickHit(PointValue, GlobalPosition);
 			QueueFree();
 		}
 	}

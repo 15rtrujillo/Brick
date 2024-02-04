@@ -7,7 +7,7 @@ using BrickGame.Pickups;
 namespace BrickGame
 {
 	public partial class Main : Node
-	{	
+	{
 		private Paddle _paddle;
 		private Ball _ball;
 		private UI _ui;

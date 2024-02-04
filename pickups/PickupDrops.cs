@@ -9,9 +9,10 @@ namespace BrickGame.Pickups
 		
 		public PickupDrops()
 		{
-			_drops.Add(new Drop(ResourceLoader.Load<PackedScene>("res://pickups/OneUp.tscn"), 50));
-			_drops.Add(new Drop(ResourceLoader.Load<PackedScene>("res://pickups/BigPaddle.tscn"), 45));
-			_drops.Add(new Drop(5));
+			_drops.Add(new Drop(ResourceLoader.Load<PackedScene>("res://pickups/OneUp.tscn"), 1));
+			_drops.Add(new Drop(ResourceLoader.Load<PackedScene>("res://pickups/BigPaddle.tscn"), 10));
+			_drops.Add(new Drop(ResourceLoader.Load<PackedScene>("res://pickups/Magnet.tscn"), 5));
+			_drops.Add(new Drop(84));
 		}
 		
 		public PackedScene RollPickup()

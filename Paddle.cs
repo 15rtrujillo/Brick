@@ -84,6 +84,8 @@ namespace BrickGame
 		{
 			if (!_magnet) return;
 			_ballAttached = true;
+			_attachedBall.Magnet();
+			_magnet = false;
 		}
 		
 		public void PickupTouched(PickupType pickupType)

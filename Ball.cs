@@ -38,11 +38,13 @@ namespace BrickGame
 					}
 				}
 
-				else if (collision.GetCollider() is Paddle charBody)
+				else if (collision.GetCollider() is Paddle paddle)
 				{
-					float relativeCollisionPosition = (collision.GetPosition().X - charBody.GlobalPosition.X) / (charBody.GetNode<Sprite2D>("Sprite2D").Scale.X / 2.0f);
+					float relativeCollisionPosition = (collision.GetPosition().X - paddle.GlobalPosition.X) / (paddle.GetNode<Sprite2D>("Sprite2D").Scale.X / 2.0f);
 					
 					bounceDirection = new Vector2(relativeCollisionPosition, -1).Normalized();
+
+					paddle.BallTouched();
 				}
 				
 				float dotProduct = Velocity.Normalized().Dot(bounceDirection.Normalized());
@@ -76,6 +78,12 @@ namespace BrickGame
 			
 			Velocity = Vector2.Up * LaunchSpeed;
 			_active = true;
+		}
+
+		public void Magnet()
+		{
+			_active = false;
+			Velocity = Vector2.Zero;
 		}
 	}
 }
